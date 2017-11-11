@@ -43,13 +43,13 @@ def receive_from(connection):
 
 
 # modify any requests destined for the remote host
-def response_handler():
+def response_handler(buffer):
     # perform packet modifications
     return buffer
 
 
 # modify any responses destined for the local host
-def request_handler():
+def request_handler(buffer):
     # perform packet modifications
     return buffer
 
@@ -128,25 +128,25 @@ def server_loop(local_host, local_port, remote_host, remote_port, receive_first)
         client_socket, addr = server.accept()
         log('[==>] Received incoming connection from %s:%d' % (addr[0], addr[1]))
         # start a thread to talk to the remote host
-        proxy_thread = threading.Thread(target=proxy_handler, args=(client_socket, remote_host, receive_first))
+        proxy_thread = threading.Thread(target=proxy_handler, args=(client_socket, remote_host, remote_port, receive_first))
         proxy_thread.start()
 
 
-def main():
+if __name__ == '__main__':
 
     # no fancy command-line parsing here
     if len(sys.argv[1:]) != 5:
         log('Usage: python proxy.py [localhost] [localport] [remotehost] [remoteport] [receive_first]')
-        log("Example: python proxy.py 127.0.0.1 9000 127.0.0.2 8000 True")
+        log('Example: python proxy.py 127.0.0.1 9000 127.0.0.2 8000 True')
         sys.exit(0)
 
     # setup local listening parameters
     local_host = sys.argv[1]
-    local_port = sys.argv[2]
+    local_port = int(sys.argv[2])
 
     # setup remote target
     remote_host = sys.argv[3]
-    remote_port = sys.argv[4]
+    remote_port = int(sys.argv[4])
 
     # this tells your proxy to connect and receive data before sending to the remote host
     receive_first = sys.argv[5]
@@ -156,4 +156,3 @@ def main():
         receive_first = False
 
     server_loop(local_host, local_port, remote_host, remote_port, receive_first)
-
