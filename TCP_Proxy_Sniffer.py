@@ -28,6 +28,7 @@ def hexdump(src, length=16):
 def receive_from(connection):
     buffer = ''
     # we set a 2 secod timeout; depending on your target, this may need to be ajusted
+    #  https://docs.python.org/2/library/socket.html#socket.socket.setblocking
     connection.settimeout(2)
 
     try:
