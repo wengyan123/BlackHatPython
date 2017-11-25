@@ -20,7 +20,7 @@ def client_sender(buffer):
 
     try:
         # connect to our target host
-        client.connect((target,port))
+        client.connect((target, port))
 
         if len(buffer):
             client.send(buffer)
@@ -57,7 +57,7 @@ def server_loop():
         target = "0.0.0.0"
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((target,port))
+    server.bind((target, port))
     server.listen(5)
 
     while True:
@@ -120,7 +120,7 @@ def client_handler(client_socket):
     if command:
         while True:
             # show a simple prompt
-            client_socket.send("<BHP:#> ")
+            client_socket.send("<BHP:#>")
 
             # now we receive until we see a linefeed(enter key)
             cmd_buffer = ""
@@ -152,7 +152,7 @@ def usage():
     sys.exit(0)
 
 
-if __name__ == '__main__':
+def main():
     global listen
     global port
     global execute
@@ -201,3 +201,5 @@ if __name__ == '__main__':
     # and drop a shell back depending on our command line options above
     if listen:
         server_loop()
+
+main()
